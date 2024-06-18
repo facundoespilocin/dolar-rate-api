@@ -68,6 +68,57 @@ namespace Ecommerce.DataAccessLayer.Repositories
             return orders.FirstOrDefault();
         }
 
+        public async Task<IEnumerable<OrderDTO>> GetAllByCustomerId(long customerId)
+        {
+            using var con = _factory.GetDbConnection;
+
+            var query = @$"SELECT 
+                               o.Id, 
+                               o.OrganizationId, 
+                               o.CustomerId, 
+                               o.PaymentMethodId,
+                               o.Amount, 
+                               o.Items, 
+                               o.Discount,
+                               o.Installments,
+                               o.DeliveryType,
+                               o.Status,
+                               p.Id,
+                               p.Name, 
+                               p.Price,
+                               SUM(cp.Quantity) AS Quantity,
+                               p.MainImageUrl,
+                               p.Discount,
+                               p.Tags
+                           FROM Orders o
+                           INNER JOIN CustomerProducts cp ON o.Id = cp.OrderId
+                           INNER JOIN Products p ON cp.ProductId = p.Id 
+                           WHERE o.CustomerId = {customerId}
+                           GROUP BY cp.ProductId;";
+
+            var result = await con.QueryAsync<OrderDTO, ProductDTO, OrderDTO>(query, (order, product) =>
+            {
+                order.Products ??= new List<ProductDTO>();
+
+                order.Products.Add(product);
+
+                return order;
+            }, splitOn: "Status");
+
+            var orders = result.GroupBy(o => o.Id).Select(g =>
+            {
+                var order = g.First();
+
+                order.Amount = g.Sum(o => o.Amount);
+
+                order.Products = g.SelectMany(o => o.Products).ToList();
+
+                return order;
+            });
+
+            return orders;
+        }
+
         public async Task<ServiceResponse> PostCreateOrder(CreateOrderDTO request, long userId)
         {
             using var con = _factory.GetDbConnection;

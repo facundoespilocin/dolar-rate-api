@@ -17,6 +17,14 @@ namespace Ecommerce.Api.Controllers
             _ordersService = ordersService;
         }
 
+        [HttpGet("customer/{customerId}")]
+        public async Task<IActionResult> GetAllByCustomerId(long customerId)
+        {
+            var result = await _ordersService.GetAllByCustomerId(customerId);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostCreateOrder([FromBody] CreateOrderDTO request)
         {

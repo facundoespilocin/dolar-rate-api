@@ -21,6 +21,8 @@ namespace Ecommerce.DataAccessLayer.Entities.Customer
         public long CountryId { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+        public string Location { get; set; }
+        public string ZipCode { get; set; }
         public DateTime BirthDate { get; set; }
         public bool IsActive { get; set; } = true;
 

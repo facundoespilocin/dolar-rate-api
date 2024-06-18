@@ -30,6 +30,13 @@ namespace Ecommerce.Services
             return order;
         }
 
+        public async Task<IEnumerable<OrderDTO>> GetAllByCustomerId(long customerId)
+        {
+            var order = await _ordersRepository.GetAllByCustomerId(customerId);
+
+            return order;
+        }
+
         public async Task<ServiceResponse> PostCreateOrder(CreateOrderDTO request, long userId)
         {
             var response = await _ordersRepository.PostCreateOrder(request, userId);
