@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Ecommerce.Utils\Ecommerce.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
 </Project>

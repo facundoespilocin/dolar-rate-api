@@ -9,12 +9,6 @@ namespace Ecommerce.Utils
             InvitedToken = 3
         }
 
-        public enum DataSourceTypes
-        {
-            Excel = 1,
-            Connector = 2,
-        }
-
         public enum StatusTypes
         {
             NotActive = 1,
@@ -34,13 +28,6 @@ namespace Ecommerce.Utils
             Male = 1,
             Female = 2,
             Other = 3
-        }
-
-        public enum OrderTypes
-        {
-            Initialized = 1,
-            Finished = 2,
-            Error = 3,
         }
     }
 }

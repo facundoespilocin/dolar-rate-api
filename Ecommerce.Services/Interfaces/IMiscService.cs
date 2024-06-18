@@ -2,12 +2,8 @@
 
 namespace Ecommerce.Services.Interfaces
 {
-    public interface IMiscService
+    public interface IDolarRateService
     {
-        Task<IEnumerable<DropdownItem>> GetCountries();
-        Task<DropdownItem> GetCountryById(long countryId);
-        
-        Task<IEnumerable<DropdownItem>> GetIndustries();
-        Task<DropdownItem> GetIndustryById(long countryId);
+        Task<IEnumerable<DropdownItem>> GetAllExchangeRates();
     }
 }

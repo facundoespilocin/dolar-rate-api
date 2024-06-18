@@ -22,32 +22,5 @@ namespace Ecommerce.DataAccessLayer.Repositories
 
             return await con.QueryAsync<DropdownItem>(query);
         }
-
-        public async Task<DropdownItem> GetCountryById(long countryId)
-        {
-            using var con = _factory.GetDbConnection;
-
-            var query = $"SELECT * FROM Countries WHERE Id = {countryId};";
-
-            return await con.QueryFirstOrDefaultAsync<DropdownItem>(query);
-        }
-
-        public async Task<IEnumerable<DropdownItem>> GetIndustries()
-        {
-            using var con = _factory.GetDbConnection;
-
-            var query = "SELECT * FROM Industries;";
-
-            return await con.QueryAsync<DropdownItem>(query);
-        }
-
-        public async Task<DropdownItem> GetIndustryById(long industryId)
-        {
-            using var con = _factory.GetDbConnection;
-
-            var query = $"SELECT * FROM Industries WHERE Id = {industryId};";
-
-            return await con.QueryFirstOrDefaultAsync<DropdownItem>(query);
-        }
     }
 }
