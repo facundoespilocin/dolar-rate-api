@@ -21,22 +21,11 @@ namespace Ecommerce.Services.Collection
 
             // Services
             services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
-            services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<IMiscService, MiscService>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IProductsService, ProductsService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<ICustomersService, CustomersService>();
-            services.AddTransient<IOrdersService, OrdersService>();
+            services.AddScoped<IDolarRateService, DolarRateService>();
 
             // Repositories
-            services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IMiscRepository, MiscRepository>();
-            services.AddTransient<IProductsRepository, ProductsRepository>();
-            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
-            services.AddTransient<ICustomersRepository, CustomersRepository>();
-            services.AddTransient<IOrdersRepository, OrdersRepository>();
         }
     }
 }

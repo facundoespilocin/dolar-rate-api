@@ -1,7 +1,9 @@
 using Ecommerce.Services.Collection;
+using Ecommerce.Services.Helpers;
 using Ecommerce.Services.Utils;
 using Ecommerce.Utils.Settings;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Ecommerce
@@ -23,18 +25,27 @@ namespace Ecommerce
             services.AddHttpContextAccessor();
             services.AddCorsConfigurationExtensions();
             services.AddControllers();
-            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            //services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddHttpClient<HttpClientWrapper>();
 
             services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
+            services.Configure<DolarApiSettings>(_configuration.GetSection("DolarApi"));
 
             services.AddMvc().AddJsonOptions(options => 
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                // Configuración para usar CamelCase en la serialización
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+
+                // Configuración para ignorar los nombres de propiedades definidos en JsonPropertyName al deserializar
+                options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcommerceAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dolar Rate API", Version = "v1" });
             });
         }
 
@@ -44,7 +55,7 @@ namespace Ecommerce
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EcommerceAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Rate API v1"));
             }
 
             app.AddCorsConfigurationExtensions();
