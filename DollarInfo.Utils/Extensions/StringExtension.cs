@@ -201,5 +201,7 @@ namespace DollarInfo.Utils.Extensions
             }
             return hashed.ToString();
         }
+
+        
     }
 }

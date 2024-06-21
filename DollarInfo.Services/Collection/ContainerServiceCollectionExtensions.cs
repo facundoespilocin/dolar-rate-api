@@ -22,7 +22,7 @@ namespace DollarInfo.Services.Collection
             // Services
             services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddScoped<IDollarRateService, DollarRateService>();
+            services.AddScoped<IRatesService, RatesService>();
 
             // Repositories
             services.AddTransient<IMiscRepository, MiscRepository>();

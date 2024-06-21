@@ -1,4 +1,4 @@
-﻿namespace DollarInfo.Services.Models
+﻿namespace DollarInfo.DAL.Dtos.Rates
 {
     public class DollarRatesDto
     {

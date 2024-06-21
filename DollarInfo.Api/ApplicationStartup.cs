@@ -25,17 +25,14 @@ namespace DollarInfo
             services.AddHttpContextAccessor();
             services.AddCorsConfigurationExtensions();
             services.AddControllers();
-            //services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddHttpClient<HttpClientWrapper>();
 
-            services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
-            services.Configure<DolarApiSettings>(_configuration.GetSection("DolarApi"));
+            services.Configure<ExternalApiSettings>(_configuration.GetSection("ExternalApi"));
 
             services.AddMvc().AddJsonOptions(options => 
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-                // Configuración para usar CamelCase en la serialización
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 
                 // Configuración para ignorar los nombres de propiedades definidos en JsonPropertyName al deserializar
@@ -45,7 +42,7 @@ namespace DollarInfo
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dolar Rate API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dollar Info API", Version = "v1" });
             });
         }
 
@@ -54,9 +51,10 @@ namespace DollarInfo
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Rate API v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
 
             app.AddCorsConfigurationExtensions();
 
