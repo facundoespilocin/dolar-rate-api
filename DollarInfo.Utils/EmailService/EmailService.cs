@@ -1,43 +1,53 @@
-﻿using DollarInfo.Utils.Settings;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.Extensions.Options;
-using MimeKit;
-using MimeKit.Text;
+﻿using Amazon.SimpleEmail;
+using Amazon.SimpleEmail.Model;
+using System.Net;
 
 namespace DollarInfo.Utils.EmailService
 {
-    public interface IEmailService
+    public class EmailService
     {
-        void Send(string to, string subject, string html, string from);
-    }
+        private readonly IAmazonSimpleEmailService _sesClient;
 
-    public class EmailService : IEmailService
-    {
-        private readonly AppSettings _appSettings;
-
-        public EmailService(IOptions<AppSettings> appSettings)
+        public EmailService(IAmazonSimpleEmailService sesClient)
         {
-            _appSettings = appSettings.Value;
+            _sesClient = sesClient;
         }
 
-        public void Send(string to, string subject, string html, string from)
+        public async Task<bool> SendEmailAsync(string toAddress, string subject, string body)
         {
-            // create message
-            var email = new MimeMessage();
+            var sendRequest = new SendEmailRequest
+            {
+                Source = Constants.EmailFrom,
+                Destination = new Destination { ToAddresses = new List<string> { toAddress } },
+                Message = new Message
+                {
+                    Subject = new Content(subject),
+                    Body = new Body
+                    {
+                        Html = new Content
+                        {
+                            Charset = "UTF-8",
+                            Data = body
+                        },
+                        Text = new Content
+                        {
+                            Charset = "UTF-8",
+                            Data = body
+                        }
+                    }
+                }
+            };
 
-            email.From.Add(MailboxAddress.Parse(from));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = html };
-
-            // send email
-            using var smtp = new SmtpClient();
-
-            smtp.Connect(_appSettings.SmtpHost, _appSettings.SmtpPort, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_appSettings.SmtpUser, _appSettings.SmtpPass);
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            try
+            {
+                var response = await _sesClient.SendEmailAsync(sendRequest);
+                return response.HttpStatusCode == HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                return false;
+            }
         }
     }
 }

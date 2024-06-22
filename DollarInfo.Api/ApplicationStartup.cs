@@ -1,3 +1,7 @@
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime;
+using Amazon.SimpleEmail;
 using DollarInfo.Services.Collection;
 using DollarInfo.Services.Helpers;
 using DollarInfo.Services.Utils;
@@ -34,8 +38,6 @@ namespace DollarInfo
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-
-                // Configuración para ignorar los nombres de propiedades definidos en JsonPropertyName al deserializar
                 options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             });
@@ -44,6 +46,14 @@ namespace DollarInfo
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dollar Info API", Version = "v1" });
             });
+
+            // AWS SES Configuration
+            var awsOptions = _configuration.GetAWSOptions();
+            awsOptions.Credentials = new BasicAWSCredentials(_configuration["AWS:AccessKey"],_configuration["AWS:SecretKey"]);
+            awsOptions.Region = RegionEndpoint.GetBySystemName(_configuration["AWS:Region"]);
+
+            services.AddDefaultAWSOptions(awsOptions);
+            services.AddAWSService<IAmazonSimpleEmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

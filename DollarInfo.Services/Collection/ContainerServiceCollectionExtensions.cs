@@ -6,6 +6,7 @@ using DollarInfo.DAL.Repositories;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Utils.EmailService;
 using DollarInfo.DAL.Aspect;
+using Amazon.SimpleEmail;
 
 namespace DollarInfo.Services.Collection
 {
@@ -21,8 +22,14 @@ namespace DollarInfo.Services.Collection
 
             // Services
             services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<EmailService>();
             services.AddScoped<IRatesService, RatesService>();
+            services.AddScoped<IBugReportService, BugReportService>();
+            services.AddSingleton(new TemplateService(
+                Path.GetFullPath(
+                    Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "DollarInfo.Utils", "EmailTemplates"))));
+
 
             // Repositories
             services.AddTransient<IMiscRepository, MiscRepository>();
