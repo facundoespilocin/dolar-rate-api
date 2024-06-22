@@ -1,5 +1,4 @@
 using Amazon;
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using DollarInfo.Services.Collection;
@@ -18,10 +17,8 @@ namespace DollarInfo
 
         public ApplicationStartup(IConfiguration configuration)
         {
-            this._configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -49,7 +46,7 @@ namespace DollarInfo
 
             // AWS SES Configuration
             var awsOptions = _configuration.GetAWSOptions();
-            awsOptions.Credentials = new BasicAWSCredentials(_configuration["AWS:AccessKey"],_configuration["AWS:SecretKey"]);
+            awsOptions.Credentials = new BasicAWSCredentials(_configuration["AWS:AccessKey"], _configuration["AWS:SecretKey"]);
             awsOptions.Region = RegionEndpoint.GetBySystemName(_configuration["AWS:Region"]);
 
             services.AddDefaultAWSOptions(awsOptions);

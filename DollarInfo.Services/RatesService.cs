@@ -5,7 +5,6 @@ using DollarInfo.Services.Helpers;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Services.Models;
 using DollarInfo.Utils.Settings;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Options;
 
 namespace DollarInfo.Services
