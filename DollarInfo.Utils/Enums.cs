@@ -29,5 +29,11 @@ namespace DollarInfo.Utils
             Female = 2,
             Other = 3
         }
+
+        public enum InflationIndexTypes
+        {
+            Monthly = 1,
+            YearOnYear = 2,
+        }
     }
 }

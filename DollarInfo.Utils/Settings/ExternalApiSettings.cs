@@ -2,21 +2,29 @@
 {
     public class ExternalApiSettings
     {
-        public DolarApiSettingsV1 DolarApi { get; set; }
-        public ArgentinaDatosApiSettingsV1 ArgentinaDatosApi { get; set; }
+        public DolarApiSettings DolarApi { get; set; }
+        public ArgentinaDatosApiSettings ArgentinaDatosApi { get; set; }
     }
 
-    public class DolarApiSettingsV1
+    public class DolarApiSettings
     {
         public string BaseUrl { get; set; }
         public string DolaresUrl { get; set; }
         public string CotizacionesUrl { get; set; }
     }
 
-    public class ArgentinaDatosApiSettingsV1
+    public class ArgentinaDatosApiSettings
     {
         public string BaseUrl { get; set; }
         public string PlazoFijoUrl { get; set; }
+        public IndicesUrlSettings IndicesUrl { get; set; }
     }
 
+    public class IndicesUrlSettings
+    {
+        public string BaseUrl { get; set; }
+        public string MensualUrl { get; set; }
+        public string InteranualUrl { get; set; }
+        public string UvaUrl { get; set; }
+    }
 }

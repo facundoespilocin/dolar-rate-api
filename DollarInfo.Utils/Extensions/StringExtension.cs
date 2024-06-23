@@ -202,6 +202,16 @@ namespace DollarInfo.Utils.Extensions
             return hashed.ToString();
         }
 
-        
+        public static DateTime ParseDate(this string dateString)
+        {
+            if (DateTime.TryParse(dateString, out DateTime parsedDate))
+            {
+                return parsedDate;
+            }
+            else
+            {
+                return new DateTime();
+            }
+        }
     }
 }

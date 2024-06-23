@@ -25,6 +25,7 @@ namespace DollarInfo.Services.Collection
             services.AddTransient<EmailService>();
             services.AddScoped<IRatesService, RatesService>();
             services.AddScoped<IBugReportService, BugReportService>();
+            services.AddScoped<IIndexesService, IndexesService>();
             services.AddSingleton(new TemplateService(
                 Path.GetFullPath(
                     Path.Combine(
