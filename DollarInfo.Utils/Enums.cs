@@ -34,6 +34,7 @@ namespace DollarInfo.Utils
         {
             Monthly = 1,
             YearOnYear = 2,
+            Uva = 3,
         }
     }
 }

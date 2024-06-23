@@ -6,7 +6,7 @@ using DollarInfo.DAL.Repositories;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Utils.EmailService;
 using DollarInfo.DAL.Aspect;
-using Amazon.SimpleEmail;
+using DollarInfo.Services.Factories;
 
 namespace DollarInfo.Services.Collection
 {
@@ -19,6 +19,7 @@ namespace DollarInfo.Services.Collection
 
             // Factories
             services.AddTransient<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<IndexUrlFactory>();
 
             // Services
             services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();

@@ -7,8 +7,6 @@ namespace DollarInfo.Services.Interfaces
 {
     public interface IIndexesService
     {
-        Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllExchangeRates();
-        Task<ServiceResponse<IEnumerable<InflationIndexDto>>> GetYearOnYearInflationIndexes();
         Task<ServiceResponse<IEnumerable<InflationIndexDto>>> GetInflationIndexes(InflationIndexTypes inflationIndexType);
     }
 }

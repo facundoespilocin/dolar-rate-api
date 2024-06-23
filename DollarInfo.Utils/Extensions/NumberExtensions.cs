@@ -21,5 +21,10 @@
 
             return 0;
         }
+
+        public static double? GetValueOrDefault(this double? value, double defaultValue = 0.0)
+        {
+            return value ?? defaultValue;
+        }
     }
 }

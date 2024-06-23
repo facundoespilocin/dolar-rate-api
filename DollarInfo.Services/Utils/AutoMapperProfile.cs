@@ -16,7 +16,8 @@ namespace DollarInfo.Services.Utils
                 .ForMember(dest => dest.ClientsTna, opt => opt.MapFrom(src => Math.Round(src.ClientsTna * 100, 2)));
 
             CreateMap<InflationIndexResponse, InflationIndexDto>()
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.ParseDate()));
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.HasValue ? src.Value : 0));
         }
     }
 }

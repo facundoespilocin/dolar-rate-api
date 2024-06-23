@@ -25,14 +25,5 @@ namespace DollarInfo.Api.Controllers
 
             return Ok(result);
         }
-
-        //[HttpGet("year-on-year-inflation")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<IActionResult> GetYearOnYearInflationIndexes()
-        //{
-        //    var result = await _indexesService.GetYearOnYearInflationIndexes();
-
-        //    return Ok(result);
-        //}
     }
 }

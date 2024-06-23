@@ -8,6 +8,6 @@ namespace DollarInfo.Services.Models
         public string Date { get; set; }
 
         [JsonPropertyName("valor")]
-        public double Value { get; set; }
+        public double? Value { get; set; }
     }
 }
