@@ -15,18 +15,13 @@ namespace DollarInfo.Services.Factories
 
         public string GetIndexUrl(InflationIndexTypes inflationIndexType)
         {
-            switch (inflationIndexType)
+            return inflationIndexType switch
             {
-                case InflationIndexTypes.Monthly:
-                    return $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.MensualUrl}";
-                case InflationIndexTypes.YearOnYear:
-                    return $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.InteranualUrl}";
-                case InflationIndexTypes.Uva:
-                    return $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.UvaUrl}";
-
-                default:
-                    throw new ArgumentException("Unsupported inflation index type.");
-            }
+                InflationIndexTypes.Monthly => $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.MensualUrl}",
+                InflationIndexTypes.YearOnYear => $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.InteranualUrl}",
+                InflationIndexTypes.Uva => $"{_settings.ArgentinaDatosApi.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.BaseUrl}{_settings.ArgentinaDatosApi.IndicesUrl.UvaUrl}",
+                _ => throw new ArgumentException("Unsupported inflation index type."),
+            };
         }
     }
 }

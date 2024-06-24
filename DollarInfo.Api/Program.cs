@@ -1,4 +1,4 @@
-namespace Data4Sales.ETL.Api
+namespace DollarInfo.Api
 {
     public class Program
     {

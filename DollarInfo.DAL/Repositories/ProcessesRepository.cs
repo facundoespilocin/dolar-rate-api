@@ -1,7 +1,10 @@
 ﻿using Dapper;
+using DollarInfo.DAL.Dtos.Indexes;
 using DollarInfo.DAL.Factory;
 using DollarInfo.DAL.Repositories.Interfaces;
-using DollarInfo.Services.Models;
+using DollarInfo.Utils.Extensions;
+using System.Runtime.Serialization;
+using static DollarInfo.Utils.Enums;
 
 namespace DollarInfo.DAL.Repositories
 {
@@ -14,31 +17,40 @@ namespace DollarInfo.DAL.Repositories
             _factory = factory;
         }
 
-        public async Task InsertInflationIndex(IEnumerable<DollarRatesResponse> dollarRates)
+        public async Task<InflationIndexDto> GetLastInflationIndex(InflationIndexTypes inflationIndexType)
         {
             using var con = _factory.GetDbConnection;
 
-            var currentDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string? table = inflationIndexType.GetValueMember<EnumMemberAttribute>().Value;
 
-            var query = @$"INSERT INTO ExchangeRates (Name, IsActive, CategoryId, Price, Quantity, BrandId, Tags, ImageUrl, CreatedBy, CreatedDate)
-                                        VALUES(@Name, @IsActive, @CategoryId, @Price, @Quantity, @BrandId, @Tags, @ImageUrl, 1, '{currentDate}');";
+            var query = @$"SELECT * FROM {table} ORDER BY Date DESC LIMIT 1;";
 
-            var result = await con.ExecuteAsync(query, dollarRates);
+            return await con.QuerySingleOrDefaultAsync<InflationIndexDto>(query);
+        }
 
-            //return new ServiceResponse
-            //{
-            //    Metadata = new Metadata
-            //    {
-            //        Message = "Success",
-            //        Status = System.Net.HttpStatusCode.OK
-            //    },
-            //    Data = new Data
-            //    {
-            //        Id = result,
-            //    }
-            //};
+        public async Task InsertInflationIndex(InflationIndexDto inflationIndex, InflationIndexTypes inflationIndexType)
+        {
+            using var con = _factory.GetDbConnection;
 
-            //return await con.QueryAsync<DropdownItem>(query);
+            string? table = inflationIndexType.GetValueMember<EnumMemberAttribute>().Value;
+
+            var query = @$"INSERT INTO {table} (Date, Value) VALUES (@Date, @Value);";
+
+            await con.ExecuteAsync(query, inflationIndex);
+        }
+
+        public async Task InsertBulkInflationIndex(IEnumerable<InflationIndexDto> inflationIndexes, InflationIndexTypes inflationIndexType)
+        {
+            using var con = _factory.GetDbConnection;
+            
+            string? table = inflationIndexType.GetValueMember<EnumMemberAttribute>().Value;
+
+            var query = @$"INSERT INTO {table} (Date, Value) VALUES (@Date, @Value);";
+
+            foreach (var item in inflationIndexes)
+            {
+                await con.ExecuteAsync(query, item);
+            }
         }
     }
 }

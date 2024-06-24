@@ -213,5 +213,10 @@ namespace DollarInfo.Utils.Extensions
                 return new DateTime();
             }
         }
+
+        public static DateTime ParseDateExact(this string dateString, string format)
+        {
+            return DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+        }
     }
 }

@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace DollarInfo.Utils
 {
     public static class Enums
@@ -32,9 +34,18 @@ namespace DollarInfo.Utils
 
         public enum InflationIndexTypes
         {
+            [EnumMember(Value = "MonthlyInflationIndexes")]
             Monthly = 1,
+            [EnumMember(Value = "YearOnYearInflationIndexes")]
             YearOnYear = 2,
+            [EnumMember(Value = "UvaInflationIndexes")]
             Uva = 3,
+        }
+
+        public enum InsertionTypes
+        {
+            Single = 1,
+            Bulk = 2
         }
     }
 }
