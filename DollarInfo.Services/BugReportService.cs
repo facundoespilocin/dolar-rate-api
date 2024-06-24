@@ -3,7 +3,6 @@ using DollarInfo.DAL.Models;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Utils;
 using DollarInfo.Utils.EmailService;
-using System.Reflection;
 
 namespace DollarInfo.Services
 {

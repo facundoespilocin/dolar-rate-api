@@ -22,19 +22,21 @@ namespace DollarInfo.Services.Collection
             services.AddScoped<IndexUrlFactory>();
 
             // Services
-            services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
-            services.AddTransient<EmailService>();
-            services.AddScoped<IRatesService, RatesService>();
-            services.AddScoped<IBugReportService, BugReportService>();
-            services.AddScoped<IIndexesService, IndexesService>();
             services.AddSingleton(new TemplateService(
                 Path.GetFullPath(
                     Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "DollarInfo.Utils", "EmailTemplates"))));
 
+            services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
+            services.AddTransient<EmailService>();
+            services.AddScoped<IRatesService, RatesService>();
+            services.AddScoped<IBugReportService, BugReportService>();
+            services.AddScoped<IIndexesService, IndexesService>();
+            services.AddScoped<IProcessesService, ProcessesService>();
 
             // Repositories
             services.AddTransient<IMiscRepository, MiscRepository>();
+            services.AddTransient<IProcessesRepository, ProcessesRepository>();
         }
     }
 }
