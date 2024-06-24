@@ -51,6 +51,18 @@ namespace DollarInfo
 
             services.AddDefaultAWSOptions(awsOptions);
             services.AddAWSService<IAmazonSimpleEmailService>();
+
+            // CORS Configuration
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAmplifyApp",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://master.dqjkzkqkjmlq8.amplifyapp.com")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,6 +78,9 @@ namespace DollarInfo
             app.AddCorsConfigurationExtensions();
 
             app.UseHttpsRedirection();
+
+            // Agregar CORS al pipeline de middleware
+            app.UseCors("AllowAmplifyApp");
 
             app.UseRouting();
 
