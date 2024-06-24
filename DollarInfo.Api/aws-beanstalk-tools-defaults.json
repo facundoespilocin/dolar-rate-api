@@ -2,7 +2,7 @@
 {
     "region" : "us-east-2",
     "configuration" : "Debug",
-    "framework"     : "net6.0",
+    "framework"     : "net8.0",
     "self-contained" : true,
     "application"    : "dollar-api",
     "environment"    : "dollar-api-prod",

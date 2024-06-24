@@ -17,13 +17,13 @@ namespace DollarInfo.Api.Controllers
             _processService = processService;
         }
 
-        [HttpPost("inflation-index")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> PostInflationIndex([FromBody] InflationIndexTypes inflationIndexType = InflationIndexTypes.Monthly)
-        {
-            await _processService.PostInflationIndex(inflationIndexType);
+        //[HttpPost("inflation-index")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //public async Task<IActionResult> PostInflationIndex([FromBody] InflationIndexTypes inflationIndexType = InflationIndexTypes.Monthly)
+        //{
+        //    await _processService.PostInflationIndex(inflationIndexType);
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }
