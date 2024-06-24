@@ -19,9 +19,9 @@ namespace DollarInfo.Api.Controllers
 
         [HttpGet("inflation")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetMonthlyInflationIndexes(InflationIndexTypes inflationIndexType = InflationIndexTypes.Monthly)
+        public async Task<IActionResult> GetAll(InflationIndexTypes inflationIndexType = InflationIndexTypes.Monthly)
         {
-            var result = await _indexesService.GetInflationIndexes(inflationIndexType);
+            var result = await _indexesService.GetAll(inflationIndexType);
 
             return Ok(result);
         }

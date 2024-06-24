@@ -17,6 +17,17 @@ namespace DollarInfo.DAL.Repositories
             _factory = factory;
         }
 
+        public async Task<IEnumerable<InflationIndexDto>> GetAll(InflationIndexTypes inflationIndexType)
+        {
+            using var con = _factory.GetDbConnection;
+
+            string? table = inflationIndexType.GetValueMember<EnumMemberAttribute>().Value;
+
+            var query = @$"SELECT * FROM {table} ORDER BY Date DESC;";
+
+            return await con.QueryAsync<InflationIndexDto>(query);
+        }
+
         public async Task<InflationIndexDto> GetLastInflationIndex(InflationIndexTypes inflationIndexType)
         {
             using var con = _factory.GetDbConnection;
