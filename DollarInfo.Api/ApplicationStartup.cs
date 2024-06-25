@@ -63,20 +63,18 @@ namespace DollarInfo
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
 
-            // Ensure UseHttpsRedirection is enabled
+            app.AddCorsConfigurationExtensions();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseCors("AllowAllOrigins");
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
-
     }
 }
