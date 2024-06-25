@@ -5,6 +5,11 @@ using DollarInfo.Services.Collection;
 using DollarInfo.Services.Helpers;
 using DollarInfo.Services.Utils;
 using DollarInfo.Utils.Settings;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -24,14 +29,15 @@ namespace DollarInfo
         {
             services.ServicesDependencyInjection(_configuration);
             services.AddHttpContextAccessor();
-            services.AddCorsConfigurationExtensions();
+            services.AddCors(); // Agregar el servicio CORS
+
             services.AddControllers();
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddHttpClient<HttpClientWrapper>();
 
             services.Configure<ExternalApiSettings>(_configuration.GetSection("ExternalApi"));
 
-            services.AddMvc().AddJsonOptions(options => 
+            services.AddMvc().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -63,7 +69,12 @@ namespace DollarInfo
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
 
-            app.AddCorsConfigurationExtensions();
+            // Configurar CORS para permitir solicitudes desde https://www.dolar-info.com
+            app.UseCors(builder =>
+                builder.WithOrigins("https://www.dolar-info.com")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials());
 
             app.UseHttpsRedirection();
 
