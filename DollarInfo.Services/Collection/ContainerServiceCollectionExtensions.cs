@@ -22,10 +22,12 @@ namespace DollarInfo.Services.Collection
             services.AddScoped<IndexUrlFactory>();
 
             // Services
-            services.AddSingleton(new TemplateService(
-                Path.GetFullPath(
-                    Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "DollarInfo.Utils", "EmailTemplates"))));
+            // Commented temp
+            //services.AddSingleton(new TemplateService(
+            //    Path.GetFullPath(
+            //        Path.Combine(
+            //            AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "DollarInfo.Utils", "EmailTemplates"))));
+            services.AddSingleton(new TemplateService(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates"))));
 
             services.AddScoped<ICurrentUserAspect, CurrentUserAspect>();
             services.AddTransient<EmailService>();

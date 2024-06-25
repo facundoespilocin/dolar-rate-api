@@ -7,6 +7,7 @@
         public class BugReportData
         {
             public string Name { get; set; }
+            public string EmailFrom { get; set; }
             public string Description { get; set; }
         }
     }

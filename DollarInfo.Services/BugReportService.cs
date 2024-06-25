@@ -28,6 +28,7 @@ namespace DollarInfo.Services
 
             string emailBody = template
                 .Replace("{{UserName}}", request.BugReport.Name)
+                .Replace("{{UserEmail}}", request.BugReport.EmailFrom)
                 .Replace("{{BugDescription}}", request.BugReport.Description)
                 .Replace("{{CurrentDate}}", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
 
