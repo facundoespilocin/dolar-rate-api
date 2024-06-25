@@ -62,7 +62,7 @@ namespace DollarInfo
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dollar Info API v1"));
 
             string domainUrl = _configuration.GetValue<string>("DolarInfo:DomainUrl") ?? string.Empty;
             string localhostUrl = _configuration.GetValue<string>("DolarInfo:LocalhostUrl") ?? string.Empty;

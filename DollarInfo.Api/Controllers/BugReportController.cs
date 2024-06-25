@@ -17,13 +17,21 @@ namespace DollarInfo.Api.Controllers
             _bugReportService = bugReportService;
         }
 
-        [HttpPost()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Post(BugReportRequest request)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get([FromQuery] BugReportRequest request)
         {
-            await _bugReportService.Post(request);
+            try
+            {
+                await _bugReportService.Post(request);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

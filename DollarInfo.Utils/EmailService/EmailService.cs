@@ -45,8 +45,7 @@ namespace DollarInfo.Utils.EmailService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending email: {ex.Message}");
-                return false;
+                throw new Exception($"Error sending email: {ex.Message}");
             }
         }
     }

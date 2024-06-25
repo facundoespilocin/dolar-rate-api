@@ -30,9 +30,9 @@ namespace DollarInfo.Services
                 string template = await _templateService.GetTemplateAsync("BugReport.html");
 
                 string emailBody = template
-                    .Replace("{{UserName}}", request.BugReport.Name)
-                    .Replace("{{UserEmail}}", request.BugReport.EmailFrom)
-                    .Replace("{{BugDescription}}", request.BugReport.Description)
+                    .Replace("{{UserName}}", request.Name)
+                    .Replace("{{UserEmail}}", request.EmailFrom)
+                    .Replace("{{BugDescription}}", request.Description)
                     .Replace("{{CurrentDate}}", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
 
                 await _emailService.SendEmailAsync(Constants.EmailFrom, Constants.Subject, emailBody);
