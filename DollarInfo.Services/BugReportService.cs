@@ -27,9 +27,7 @@ namespace DollarInfo.Services
         {
             try
             {
-                string template = await _templateService.GetTemplateAsync("BugReport.html");
-
-                string emailBody = template
+                string emailBody = Constants.BugReportBody
                     .Replace("{{UserName}}", request.Name)
                     .Replace("{{UserEmail}}", request.EmailFrom)
                     .Replace("{{BugDescription}}", request.Description)
