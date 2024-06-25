@@ -5,11 +5,6 @@ using DollarInfo.Services.Collection;
 using DollarInfo.Services.Helpers;
 using DollarInfo.Services.Utils;
 using DollarInfo.Utils.Settings;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -29,7 +24,7 @@ namespace DollarInfo
         {
             services.ServicesDependencyInjection(_configuration);
             services.AddHttpContextAccessor();
-            services.AddCors(); // Agregar el servicio CORS
+            services.AddCors();
 
             services.AddControllers();
             services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -69,9 +64,13 @@ namespace DollarInfo
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
 
-            // Configurar CORS para permitir solicitudes desde https://www.dolar-info.com
+            string domainUrl = _configuration.GetValue<string>("DolarInfo:DomainUrl") ?? string.Empty;
+            string localhostUrl = _configuration.GetValue<string>("DolarInfo:LocalhostUrl") ?? string.Empty;
+
+            var allowedOrigins = new[] { domainUrl, localhostUrl };
+
             app.UseCors(builder =>
-                builder.WithOrigins("https://www.dolar-info.com")
+                builder.WithOrigins(allowedOrigins)
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials());

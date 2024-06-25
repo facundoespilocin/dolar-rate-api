@@ -21,7 +21,7 @@ namespace DollarInfo.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(InflationIndexTypes inflationIndexType = InflationIndexTypes.Monthly)
         {
-            var result = await _indexesService.GetAll(inflationIndexType);
+            var result = await _indexesService.GetInflationIndexes(inflationIndexType);
 
             return Ok(result);
         }
