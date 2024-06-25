@@ -3,6 +3,7 @@ using DollarInfo.DAL.Models;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Utils;
 using DollarInfo.Utils.EmailService;
+using System;
 
 namespace DollarInfo.Services
 {
@@ -24,15 +25,22 @@ namespace DollarInfo.Services
 
         public async Task Post(BugReportRequest request)
         {
-            string template = await _templateService.GetTemplateAsync("BugReport.html");
+            try
+            {
+                string template = await _templateService.GetTemplateAsync("BugReport.html");
 
-            string emailBody = template
-                .Replace("{{UserName}}", request.BugReport.Name)
-                .Replace("{{UserEmail}}", request.BugReport.EmailFrom)
-                .Replace("{{BugDescription}}", request.BugReport.Description)
-                .Replace("{{CurrentDate}}", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                string emailBody = template
+                    .Replace("{{UserName}}", request.BugReport.Name)
+                    .Replace("{{UserEmail}}", request.BugReport.EmailFrom)
+                    .Replace("{{BugDescription}}", request.BugReport.Description)
+                    .Replace("{{CurrentDate}}", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
 
-            await _emailService.SendEmailAsync(Constants.EmailFrom, Constants.Subject, emailBody);
+                await _emailService.SendEmailAsync(Constants.EmailFrom, Constants.Subject, emailBody);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error sending email. Error description: {e.Message}");
+            }
         }
     }
 }
