@@ -24,24 +24,14 @@ namespace DollarInfo
         {
             services.ServicesDependencyInjection(_configuration);
             services.AddHttpContextAccessor();
-
-            // CORS configuration
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder => builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-            });
-
+            services.AddCorsConfigurationExtensions();
             services.AddControllers();
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddHttpClient<HttpClientWrapper>();
 
             services.Configure<ExternalApiSettings>(_configuration.GetSection("ExternalApi"));
 
-            services.AddMvc().AddJsonOptions(options =>
+            services.AddMvc().AddJsonOptions(options => 
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -73,11 +63,9 @@ namespace DollarInfo
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dolar Info API v1"));
 
-            // Apply CORS policy
-            app.UseCors("AllowAllOrigins");
+            app.AddCorsConfigurationExtensions();
 
-            // Comment out UseHttpsRedirection to allow HTTP
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
