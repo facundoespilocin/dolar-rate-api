@@ -80,6 +80,12 @@ namespace DollarInfo
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                // Health Checks Route
+                endpoints.MapGet("/health", async context =>
+                {
+                    await context.Response.WriteAsync("Healthy");
+                });
             });
         }
 
