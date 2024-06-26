@@ -31,6 +31,7 @@ namespace DollarInfo
             services.AddHttpClient<HttpClientWrapper>();
 
             services.Configure<ExternalApiSettings>(_configuration.GetSection("ExternalApi"));
+            services.Configure<OriginsSettings>(_configuration.GetSection("OriginsSettings"));
 
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -64,13 +65,8 @@ namespace DollarInfo
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dollar Info API v1"));
 
-            string domainUrl = _configuration.GetValue<string>("DolarInfo:DomainUrl") ?? string.Empty;
-            string localhostUrl = _configuration.GetValue<string>("DolarInfo:LocalhostUrl") ?? string.Empty;
-
-            var allowedOrigins = new[] { domainUrl, localhostUrl };
-
             app.UseCors(builder =>
-                builder.WithOrigins(allowedOrigins)
+                builder.WithOrigins(ConfigureOrigins())
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials());
@@ -85,6 +81,13 @@ namespace DollarInfo
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public string[] ConfigureOrigins()
+        {
+            var origins = _configuration.GetSection("DolarInfo").Get<OriginsSettings>();
+
+            return [origins.DomainUrl, origins.LocalhostUrl, origins.BaseUrl];
         }
     }
 }
