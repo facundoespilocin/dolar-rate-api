@@ -21,7 +21,8 @@ namespace DollarInfo.Api.Controllers
         public async Task<IActionResult> GetAllExchangeRates()
         {
             //var result = await _ratesService.ProcessExchangeRates();
-            var result = await _ratesService.GetAllExchangeRates();
+            var result = await _ratesService.GetAllExchangeRatesTemp();
+            //var result = await _ratesService.GetAllExchangeRates();
 
             return Ok(result);
         }

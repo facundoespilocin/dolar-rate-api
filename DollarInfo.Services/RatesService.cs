@@ -83,6 +83,29 @@ namespace DollarInfo.Services
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllExchangeRatesTemp()
+        {
+            string url = $"{_externalApiSettings.DolarApi.BaseUrl}/{_externalApiSettings.DolarApi.DolaresUrl}";
+
+            ServiceResponse<IEnumerable<DollarRatesDto>> serviceResponse = new();
+
+            try
+            {
+                var response = await _httpClientWrapper.GetAsync<IEnumerable<DollarRatesResponse>>(url);
+
+                serviceResponse.Data = _mapper.Map<IEnumerable<DollarRatesDto>>(response.Data);
+
+                //_logger.LogPayrInfo("Description.", payload: serviceResponse.Data);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.AddError(ex);
+                //_logger.LogPayrException(EventCode.UNEXPECTED_EXCEPTION, "Description.", ex, alias);
+            }
+
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllMarketRates()
         {
             string url = $"{_externalApiSettings.DolarApi.BaseUrl}{_externalApiSettings.DolarApi.CotizacionesUrl}";

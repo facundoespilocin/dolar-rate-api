@@ -8,6 +8,7 @@ namespace DollarInfo.Services.Interfaces
     {
         Task<ServiceResponse<IEnumerable<ExchangeRateValues>>> ProcessExchangeRates();
         Task<ServiceResponse<IEnumerable<DollarRatesResponse>>> GetAllExchangeRates();
+        Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllExchangeRatesTemp();
         Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllMarketRates();
         Task<ServiceResponse<IEnumerable<FixedTermRateDto>>> GetFixedTermRates();
     }
