@@ -20,6 +20,7 @@ namespace DollarInfo.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllExchangeRates()
         {
+            //var result = await _ratesService.ProcessExchangeRates();
             var result = await _ratesService.GetAllExchangeRates();
 
             return Ok(result);

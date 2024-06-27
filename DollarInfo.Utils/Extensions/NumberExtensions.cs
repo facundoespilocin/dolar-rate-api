@@ -26,5 +26,15 @@
         {
             return value ?? defaultValue;
         }
+
+        public static double CalculateExchangeRateIndex(this double previousValue, double currentValue)
+        {
+            if (previousValue == 0)
+            {
+                throw new ArgumentException("Previous Value cannot be zero.");
+            }
+
+            return ((currentValue - previousValue) / previousValue) * 100;
+        }
     }
 }

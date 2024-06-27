@@ -39,6 +39,7 @@ namespace DollarInfo.Services.Collection
             // Repositories
             services.AddTransient<IMiscRepository, MiscRepository>();
             services.AddTransient<IProcessesRepository, ProcessesRepository>();
+            services.AddTransient<IRatesRepository, RatesRepository>();
         }
     }
 }

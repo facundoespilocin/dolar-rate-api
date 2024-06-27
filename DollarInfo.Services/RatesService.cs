@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DollarInfo.DAL.Dtos.Rates;
 using DollarInfo.DAL.Models;
+using DollarInfo.DAL.Repositories.Interfaces;
 using DollarInfo.Services.Helpers;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Services.Models;
@@ -13,29 +14,63 @@ namespace DollarInfo.Services
     {
         private readonly HttpClientWrapper _httpClientWrapper;
         private readonly ExternalApiSettings _externalApiSettings;
+        private readonly IRatesRepository _ratesRepository;
         private readonly IMapper _mapper;
 
         public RatesService(
             HttpClientWrapper httpClientWrapper,
             IOptions<ExternalApiSettings> externalApiSettings,
+            IRatesRepository ratesRepository,
             IMapper mapper)
         {
             _httpClientWrapper = httpClientWrapper;
             _externalApiSettings = externalApiSettings.Value;
+            _ratesRepository = ratesRepository;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<DollarRatesDto>>> GetAllExchangeRates()
+        public async Task<ServiceResponse<IEnumerable<ExchangeRateValues>>> ProcessExchangeRates()
+        {
+            try
+            {
+                ServiceResponse<IEnumerable<ExchangeRateValues>> serviceResponse = new();
+
+                var currentExchangeRates = await GetAllExchangeRates();
+
+                if (!currentExchangeRates.Data.Any())
+                {
+                    return serviceResponse;
+                }
+
+                serviceResponse.Data = _mapper.Map<IEnumerable<ExchangeRateValues>>(currentExchangeRates.Data);
+
+                IEnumerable<ExchangeRateValues> lastExchangeRates = await _ratesRepository.GetLastExchangeRates();
+
+                await ExchangeRatesHasDifferences(serviceResponse.Data, lastExchangeRates);
+
+                IEnumerable<ExchangeRateValues> firstRecordOfToday = await _ratesRepository.GetFirstRecordOfToday();
+
+                CalculateVariation(serviceResponse.Data, firstRecordOfToday);
+
+                return serviceResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving Exchange Rates: {ex.Message}");
+            }
+        }
+
+        public async Task<ServiceResponse<IEnumerable<DollarRatesResponse>>> GetAllExchangeRates()
         {
             string url = $"{_externalApiSettings.DolarApi.BaseUrl}/{_externalApiSettings.DolarApi.DolaresUrl}";
 
-            ServiceResponse<IEnumerable<DollarRatesDto>> serviceResponse = new();
+            ServiceResponse<IEnumerable<DollarRatesResponse>> serviceResponse = new();
 
             try
             {
                 var response = await _httpClientWrapper.GetAsync<IEnumerable<DollarRatesResponse>>(url);
 
-                serviceResponse.Data = _mapper.Map<IEnumerable<DollarRatesDto>>(response.Data);
+                serviceResponse.Data = _mapper.Map<IEnumerable<DollarRatesResponse>>(response.Data);
 
                 //_logger.LogPayrInfo("Description.", payload: serviceResponse.Data);
             }
@@ -86,6 +121,50 @@ namespace DollarInfo.Services
             }
 
             return serviceResponse;
+        }
+
+        private async Task<bool> ExchangeRatesHasDifferences(IEnumerable<ExchangeRateValues> currentExchangeRates, IEnumerable<ExchangeRateValues> lastExchangeRates)
+        {
+            if (lastExchangeRates is null || !lastExchangeRates.Any())
+            {
+                await _ratesRepository.InsertExchangeRateValues(currentExchangeRates);
+
+                return true;
+            }
+
+            var currentDictionary = currentExchangeRates.ToDictionary(x => x.Id);
+
+            var lastDictionary = lastExchangeRates.ToDictionary(x => x.Id);
+
+            foreach (var kvp in currentDictionary)
+            {
+                if (lastDictionary.TryGetValue(kvp.Key, out var lastValue))
+                {
+                    var currentValue = kvp.Value;
+
+                    if (currentValue.PurchasePrice != lastValue.PurchasePrice || currentValue.SalePrice != lastValue.SalePrice)
+                    {
+                        await _ratesRepository.InsertExchangeRateValues(currentExchangeRates);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static void CalculateVariation(IEnumerable<ExchangeRateValues> currentRates, IEnumerable<ExchangeRateValues> firstRecordOfToday)
+        {
+            foreach (var rate in currentRates)
+            {
+                var lastRate = firstRecordOfToday.FirstOrDefault(lr => lr.Id == rate.Id);
+
+                if (lastRate is not null)
+                {
+                    rate.CalculateVariation(lastRate.SalePrice, rate.SalePrice);
+                }
+            }
         }
     }
 }

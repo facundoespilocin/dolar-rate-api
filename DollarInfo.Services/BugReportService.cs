@@ -1,27 +1,15 @@
-﻿using AutoMapper;
-using DollarInfo.DAL.Models;
+﻿using DollarInfo.DAL.Models;
 using DollarInfo.Services.Interfaces;
 using DollarInfo.Utils;
 using DollarInfo.Utils.EmailService;
-using System;
 
 namespace DollarInfo.Services
 {
     public class BugReportService : IBugReportService
     {
-        private readonly IMapper _mapper;
         private readonly EmailService _emailService;
-        private readonly TemplateService _templateService;
 
-        public BugReportService(
-            IMapper mapper,
-            EmailService emailService,
-            TemplateService templateService)
-        {
-            _mapper = mapper;
-            _emailService = emailService;
-            _templateService = templateService;
-        }
+        public BugReportService(EmailService emailService) => _emailService = emailService;
 
         public async Task Post(BugReportRequest request)
         {

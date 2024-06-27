@@ -35,8 +35,6 @@ namespace DollarInfo.Services
 
             try
             {
-                var result = await _processesRepository.GetAll(inflationIndexType);
-
                 serviceResponse.Data = await _processesRepository.GetAll(inflationIndexType);
             }
             catch (Exception ex)

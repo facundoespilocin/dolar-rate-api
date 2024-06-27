@@ -47,5 +47,17 @@ namespace DollarInfo.Utils
             Single = 1,
             Bulk = 2
         }
+
+        public enum ExchangeRateType
+        {
+            Oficial = 1,
+            Blue = 2,
+            Bolsa = 3,
+            Contadoconliquidación = 4,
+            Mayorista = 5,
+            Cripto = 6,
+            Tarjeta = 7,
+            Otro = 8
+        }
     }
 }
